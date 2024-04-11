@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock </title>
+    
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    }
+
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: radial-gradient(circle, rgba(6, 79, 142, 0.836), rgb(2, 90, 74) );
+      
+
+    }
+    .clock{
+        width: 500px;
+        height: 500px;
+        position: relative;
+        background-color : lightgray;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle, rgba(5, 103, 133, 0.674), black);
+
+    }
+   
+    .number {
+        transform:rotate(calc(30deg*var(--n))) ;
+        position: absolute;
+        text-align: center;
+        inset: 20px;
+        font-size: 40px;
+        color:rgb(0, 157, 255);
+        text-shadow: 1px 1px 12px pink;
+
+    }
+    .number b{
+transform: rotate(calc(-30deg * var(--n)));
+display: inline-block;
+    }
+    .center-dot{
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background-color: gray;
+        border-radius: 50%;
+
+    }
+.hour-hand, .minute-hand, .second-hand{
+    position:absolute;
+    left: 50%;
+    bottom: 50%;
+    transform: translate(-50%) rotate(calc(var(--rotate)*1deg));
+    transform-origin: bottom;
+}
+.hour-hand{
+    width: 12px;
+    height:130px;
+    background: linear-gradient(rgb(255, 0, 174), rgb(0, 0, 0));
+
+}
+.minute-hand{
+    width:12px;
+    height:190px;
+    background: linear-gradient(red,black);
+
+}
+.second-hand{
+    width: 6px;
+    height: 210px;
+    background: linear-gradient(blue,black);
+
+}
+@media screen and (max-width:450px){
+    .clock{
+        width: 350px;
+        height: 350px;
+    }
+    .hour-hand{
+        width: 10px;
+        height: 100px;
+    }
+    .minute-hand{
+        width: 10px;
+        height: 140px;
+    }
+    .second-hand{
+        height: 170px;
+    }
+}
+.greeting {
+  font-size: 24px;
+  margin-top: 10px;
+  color: #555;
+}
+
+.speak-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+</style>
+<body>
+   <div class="clock">
+    <div class="number" style="--n:1"><b>1</b></div>
+    <div class="number" style="--n:2"><b>2</b></div>
+    <div class="number" style="--n:3"><b>3</b></div>
+    <div class="number" style="--n:4"><b>4</b></div>
+    <div class="number" style="--n:5"><b>5</b></div>
+    <div class="number" style="--n:6"><b>6</b></div>
+    <div class="number" style="--n:7"><b>7</b></div>
+    <div class="number" style="--n:8"><b>8</b></div>
+    <div class="number" style="--n:9"><b>9</b></div>
+    <div class="number" style="--n:10"><b>10</b></div>
+    <div class="number" style="--n:11"><b>11</b></div>
+    <div class="number" style="--n:12"><b>12</b></div>
+     <div class="hour-hand" id="hour-hand"></div>
+     <div class="minute-hand" id="minute-hand"></div>
+     <div class="second-hand" id="second-hand"></div>
+     <div class="center-dot"></div>
+     
+   </div>
+   <br> 
+   <div id="greeting" class="greeting"></div>
+     <!-- <button id="speakButton" class="speak-button">बोलो</button> -->
+   <script>
+const secondHand = document.getElementById('second-hand');
+const minuteHand = document.getElementById('minute-hand');
+const hourHand = document.getElementById('hour-hand'); 
+
+
+const greetingElement = document.getElementById('greeting');
+const speakButton = document.getElementById('speakButton');
+const greetings = {
+    'Good Morning': [5, 12],
+    'Good Afternoon': [12, 17],
+    'Good Evening': [17, 20],
+    'Good Night': [20, 5],
+  };
+
+ 
+function clockTick() {
+    const date = new Date();
+    const h = date.getHours();
+    const m = date.getMinutes();
+    // const s = date.getSeconds();
+    const seconds = date.getSeconds()/60;
+    const minutes = (seconds + m)/60;
+    const hours = (minutes + h)/12;
+     
+    rotateClockHand(secondHand, seconds);
+    rotateClockHand(minuteHand, minutes);
+    rotateClockHand(hourHand, hours);
+   addEventListener('click', () => {
+    const masage =  'samay hain';
+    const masage2 = 'baaaj ke'
+    const masage3 = 'minute'
+    speak(masage + h + masage2 + m + masage3 );
+  });
+}
+
+
+  function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(utterance);
+}
+function rotateClockHand(element, rotation){
+    element.style.setProperty('--rotate', rotation * 360);
+ 
+}
+setInterval(clockTick, 1000);
+   </script>
+</body>
+</html>
